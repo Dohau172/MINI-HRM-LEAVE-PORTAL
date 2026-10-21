@@ -1,3 +1,4 @@
+
 # HỆ THỐNG QUẢN LÝ NGHỈ PHÉP NỘI BỘ (MINI HRM LEAVE PORTAL)
 ## PHIÊN BẢN 3.3 - BẢN NGHIỆM THU CHÍNH THỨC (SEPARATION OF DUTIES BASELINE)
 
@@ -369,4 +370,5 @@ Tại màn hình Đăng nhập (`http://localhost:3000/login`), hệ thống h�
 - `GET /api/admin/payroll/summary?monthYear=...`: **[HR Manager]** Lấy dữ liệu bảng tổng hợp công - phép phục vụ xuất file Excel & PDF (FR-14).
 - `GET /api/admin/system/sso-config`: **[IT Admin]** Lấy thông tin cấu hình SSO Google/Microsoft và trạng thái hạ tầng/DB.
 - `POST /api/admin/system/sso-config`: **[IT Admin]** Cập nhật cấu hình SSO OAuth 2.0 / OpenID Connect và chính sách bắt buộc MFA.
+
 
