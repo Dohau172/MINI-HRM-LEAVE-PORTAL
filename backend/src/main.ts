@@ -5,11 +5,27 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // Cho phép kết nối trực tiếp từ Frontend (Hỗ trợ tất cả origin cục bộ trong môi trường dev)
+  // Cấu hình CORS toàn diện cho Frontend Render và Local Dev
+  const allowedOrigins = [
+    'https://mini-hrm-portal.onrender.com',
+    'https://mini-hrm-leave-portal.onrender.com',
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+    'http://localhost:5173',
+    'http://127.0.0.1:5173',
+  ];
+
   app.enableCors({
-    origin: true,
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin) || origin.endsWith('.onrender.com')) {
+        callback(null, true);
+      } else {
+        callback(null, true);
+      }
+    },
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
+    allowedHeaders: 'Content-Type,Accept,Authorization,X-Requested-With',
   });
 
   // Kích hoạt tiền tố API
