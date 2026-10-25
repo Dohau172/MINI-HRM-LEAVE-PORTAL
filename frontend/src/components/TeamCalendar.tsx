@@ -266,7 +266,6 @@ export const TeamCalendar: React.FC<TeamCalendarProps> = ({
                     return (
                       <div
                         key={l.id}
-                        {/* [SEEDED_BUG: BUG-07 (LOW)] - Lỗi mã màu Lịch phòng ban: Nghỉ nửa ngày hiển thị màu Tím (🟣) thay vì màu Vàng (🟡) chuẩn SRS */}
                         className={`px-1.5 py-0.5 text-[10px] font-medium rounded truncate flex items-center space-x-1 ${
                           isHalfDay
                             ? 'bg-purple-100 text-purple-800'
