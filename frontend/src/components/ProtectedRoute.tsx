@@ -34,7 +34,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   // Kiểm soát RBAC (BR-14): Kiểm tra quyền hạn vai trò
   if (validRoles.length > 0 && !validRoles.includes(user.role)) {
     // Điều hướng về đúng portal tương ứng với vai trò của user
-    if (user.role === 'ADMIN') {
+    if (user.role === 'ADMIN' || user.role === 'HR') {
       return <Navigate to="/admin" replace />;
     }
     if (user.role === 'MANAGER' || user.role === 'DIRECTOR') {
@@ -45,3 +45,4 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 
   return <>{children}</>;
 };
+

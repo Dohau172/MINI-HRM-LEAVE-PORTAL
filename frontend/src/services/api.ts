@@ -1,7 +1,18 @@
 import axios from 'axios';
 
+const getBaseUrl = (): string => {
+  const envUrl = (import.meta as ImportMeta & { env: Record<string, string | undefined> }).env.VITE_API_URL;
+  if (envUrl) {
+    return envUrl;
+  }
+  return (import.meta as ImportMeta & { env: Record<string, string | boolean | undefined> }).env.DEV
+    ? '/api'
+    : 'https://mini-hrm-leave-portal.onrender.com/api';
+};
+
 const api = axios.create({
-  baseURL: (import.meta as ImportMeta & { env: Record<string, string | undefined> }).env.VITE_API_URL || '/api',
+  baseURL: getBaseUrl(),
+  timeout: 60000, // 60s timeout dự phòng cho Render Free Tier khởi động máy chủ (Cold Start)
 });
 
 // Gán Bearer Token vào mọi request
