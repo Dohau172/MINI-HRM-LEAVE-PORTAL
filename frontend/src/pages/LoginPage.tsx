@@ -24,9 +24,12 @@ export const LoginPage: React.FC = () => {
       navigate(res.data.redirectPath);
     } catch (err: any) {
       console.error('Chi tiết lỗi:', err);
-      const statusText = err.response ? `[HTTP ${err.response.status}]` : '[Lỗi mạng/Không có phản hồi]';
-      const serverMessage = err.response?.data?.message || err.message || 'Lỗi không xác định';
-      setError(`${statusText}: ${serverMessage}`);
+      if (!err.response) {
+        setError('[Lỗi mạng/Không có phản hồi]: Không thể kết nối tới máy chủ API. Vui lòng đảm bảo Backend (cổng 5000) và PostgreSQL đang chạy.');
+      } else {
+        const serverMessage = err.response?.data?.message || err.message || 'Lỗi không xác định';
+        setError(`[HTTP ${err.response.status}]: ${serverMessage}`);
+      }
     } finally {
       setLoading(false);
     }

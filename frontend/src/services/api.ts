@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: (import.meta as ImportMeta & { env: Record<string, string | undefined> }).env.VITE_API_URL || 'https://mini-hrm-leave-portal.onrender.com/api',
+  baseURL: (import.meta as ImportMeta & { env: Record<string, string | undefined> }).env.VITE_API_URL || '/api',
 });
 
 // Gán Bearer Token vào mọi request

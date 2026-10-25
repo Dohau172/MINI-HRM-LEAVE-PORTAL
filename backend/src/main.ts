@@ -5,9 +5,9 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // Cho phép kết nối trực tiếp từ Frontend
+  // Cho phép kết nối trực tiếp từ Frontend (Hỗ trợ tất cả origin cục bộ trong môi trường dev)
   app.enableCors({
-    origin: ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:5173', 'http://127.0.0.1:5173'],
+    origin: true,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });
