@@ -99,7 +99,7 @@ Nếu bạn muốn kiểm soát từng thành phần chi tiết:
    - **Runtime:** `Node`
    - **Build Command:**
      ```bash
-     npm install && npx prisma generate && npx prisma db push && npm run prisma:seed && npm run build
+     rm -rf node_modules && npm install && npx prisma generate && npx prisma db push && npm run prisma:seed && npm run build
      ```
    - **Start Command:**
      ```bash
@@ -107,6 +107,7 @@ Nếu bạn muốn kiểm soát từng thành phần chi tiết:
      ```
    - **Instance Type:** `Free`
 4. Cuộn xuống mục **Environment Variables**, bấm **Add Environment Variable** và thêm các biến sau:
+   - `NODE_VERSION`: `20.18.0`
    - `PORT`: `5000`
    - `DATABASE_URL`: Dán dòng **Internal Database URL** vừa copy ở bước 1 vào đây.
    - `JWT_SECRET`: `super-secret-mini-hrm-key-2026`
@@ -127,10 +128,11 @@ Nếu bạn muốn kiểm soát từng thành phần chi tiết:
    - **Root Directory:** `frontend`
    - **Build Command:**
      ```bash
-     npm install && npm run build
+     rm -rf node_modules && npm install && npm run build
      ```
    - **Publish Directory:** `dist`
 4. Cuộn xuống mục **Environment Variables**, thêm biến:
+   - `NODE_VERSION`: `20.18.0`
    - `VITE_API_URL`: `https://mini-hrm-backend-xxxx.onrender.com/api` *(thay bằng URL Backend thật bạn vừa copy ở bước 2, nhớ có đuôi `/api`)*.
 5. **CẤU HÌNH QUAN TRỌNG ĐỂ KHÔNG BỊ LỖI 404 KHI F5 TRANG (SPA REWRITE):**
    - Vào menu bên trái của Frontend $\rightarrow$ chọn **Redirects/Rewrites**.
