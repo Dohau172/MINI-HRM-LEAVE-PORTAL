@@ -1,10 +1,10 @@
-# BỘ 10 LỖI CÀI CẮM KIỂM THỬ PHẦN MỀM (SEEDED DEFECTS MATRIX)
+# BỘ 13 LỖI CÀI CẮM KIỂM THỬ PHẦN MỀM (SEEDED DEFECTS MATRIX)
 ## DỰ ÁN: MINI HRM LEAVE PORTAL (HỆ THỐNG QUẢN LÝ NGHỈ PHÉP DOANH NGHIỆP)
-> **Mục đích:** Cung cấp danh mục 10 lỗi thực tế từ **Low $\rightarrow$ High** (chính xác 1 lỗi High) đã được cài cắm trực tiếp vào hệ thống để Tester thực hành kiểm thử chức năng (Functional Testing), kiểm thử giá trị biên (Boundary Value Testing), kiểm thử phân vùng tương đương (Equivalence Partitioning) và kiểm thử giao diện (UI/UX Testing).
+> **Mục đích:** Cung cấp danh mục **13 lỗi thực tế** từ **Low $\rightarrow$ High** (gồm **10 lỗi vi phạm đặc tả nghiệp vụ SRS** và **3 lỗi mở rộng chuyên sâu ngoài đặc tả SRS**) đã được cài cắm trực tiếp vào hệ thống để Tester thực hành kiểm thử chức năng (Functional Testing), kiểm thử giá trị biên (Boundary Value Testing), kiểm thử phân vùng tương đương (Equivalence Partitioning), kiểm thử giao diện & độ bất đồng bộ (UI/UX & Race Condition Testing), và kiểm thử an toàn bảo mật (Security / IDOR Testing).
 
 ---
 
-## 📊 BẢNG TỔNG HỢP 10 LỖI (DEFECT SUMMARY TABLE)
+## 📊 BẢNG TỔNG HỢP 13 LỖI (DEFECT SUMMARY TABLE)
 
 | Mã Bug | Mức độ (Severity) | Phân loại lỗi (Bug Category) | Module / Chức năng | Tiêu chuẩn vi phạm | Tệp mã nguồn cài cắm |
 | :---: | :---: | :--- | :--- | :---: | :--- |
@@ -18,10 +18,17 @@
 | **BUG-08** | 🟡 **LOW** | Localization / Text Quality | Thông báo lỗi từ chối đơn | **BR-12** | `backend/src/leave/dto/leave.dto.ts` |
 | **BUG-09** | 🟡 **LOW** | Search Functionality / Usability | Tìm kiếm nhân sự trên Admin Portal | **FR-11 / UX** | `frontend/src/pages/AdminDashboard.tsx` |
 | **BUG-10** | 🟡 **LOW** | File Export / Operating System | Xuất báo cáo công lương (.csv) | **FR-14 / UX** | `frontend/src/pages/AdminDashboard.tsx` |
+| **BUG-11** | 🔴 **HIGH** | Security / Broken Access Control (IDOR) | Rút/Hủy đơn xin nghỉ (Recall Leave) | **Ngoài SRS / OWASP Top 1** | `backend/src/leave/leave.service.ts` |
+| **BUG-12** | 🟠 **MEDIUM** | Functional / Race Condition (Double Submit)| Nộp đơn xin nghỉ (Leave Request) | **Ngoài SRS / Network UX** | `frontend/src/pages/EmployeeDashboard.tsx` |
+| **BUG-13** | 🟡 **LOW** | UI Display Glitch / Boundary Overflow | Bảng lịch sử đơn của nhân viên | **Ngoài SRS / CSS Layout** | `frontend/src/pages/EmployeeDashboard.tsx` |
 
 ---
 
 ## 🔍 CHI TIẾT KỊCH BẢN KIỂM THỬ TỪNG LỖI (TEST SPECIFICATIONS)
+
+---
+
+## PHẦN I: 10 LỖI VI PHẠM ĐẶC TẢ NGHIỆP VỤ SRS (SRS BASELINE DEFECTS)
 
 ---
 
@@ -187,6 +194,97 @@
 
 ---
 
+## PHẦN II: 03 LỖI THỰC TẾ MỞ RỘNG NGOÀI ĐẶC TẢ SRS (OUT-OF-SRS CHALLENGE DEFECTS)
+
+> **Lưu ý nghiệp vụ:** Cả 3 lỗi dưới đây **hoàn toàn không vi phạm các Business Rules (BR-01 đến BR-15)** trong SRS (các Unit Tests `npm run test` vẫn 100% Passed). Đây là các lỗi phát sinh từ các góc độ kiểm thử thực tế chuyên sâu (An toàn thông tin OWASP, Bất đồng bộ mạng / Concurrency và Xử lý biên chuỗi ký tự giao diện).
+
+---
+
+### 🔴 LỖI 11: BUG-11 (MỨC ĐỘ CAO - HIGH SEVERITY)
+* **Tên lỗi:** Lỗ hổng IDOR (Insecure Direct Object Reference) cho phép nhân viên rút/hủy đơn xin nghỉ của người khác bằng cách thay đổi `requestId`.
+* **Mức độ:** **High (Critical Security / Broken Object Level Authorization - OWASP Top 1)**
+* **Tiêu chuẩn vi phạm:** **Ngoài đặc tả SRS** (SRS chỉ quy định quyền rút đơn cho nhân viên khi đơn đang chờ duyệt theo BR-11, nhưng không đặc tả chặt chẽ việc phòng chống lỗ hổng phân quyền đối tượng ở tầng API backend).
+* **Tài khoản kiểm thử:** 
+  - Nạn nhân A: `an.nguyen@company.vn` (người tạo đơn)
+  - Kẻ tấn công B: `linh.dang@company.vn` (nhân sự thử việc thực hiện rút trộm đơn)
+* **Các bước tái hiện (Steps to Reproduce):**
+  1. Đăng nhập tài khoản nhân viên A: `an.nguyen@company.vn` (Mật khẩu: `Pass@123`).
+  2. Tạo 1 đơn xin nghỉ phép mới (đơn ở trạng thái `CHỜ DUYỆT`).
+  3. Mở **Developer Tools (F12) -> tab Network**, xem request tạo đơn hoặc danh sách đơn để sao chép lấy mã `id` của đơn vừa tạo (ví dụ: `d9e8f7a6-...`).
+  4. Đăng xuất tài khoản A, đăng nhập vào tài khoản nhân viên B: `linh.dang@company.vn` (Mật khẩu: `Pass@123`).
+  5. Mở **Console trình duyệt (F12)** hoặc Postman, thực thi câu lệnh gọi API rút đơn bằng `id` của nhân viên A:
+     ```javascript
+     fetch('/api/leave/request/ID_DON_CUA_NGUYEN_VAN_AN/recall', {
+       method: 'DELETE',
+       headers: {
+         'Authorization': 'Bearer ' + localStorage.getItem('token')
+       }
+     }).then(res => res.json()).then(data => console.log(data));
+     ```
+* **Kết quả mong đợi (Expected):** Hệ thống phải chặn và trả về mã lỗi `403 Forbidden`: *"Bạn không có quyền rút đơn của nhân viên khác."*
+* **Kết quả thực tế bị lỗi (Actual):** Hệ thống trả về `HTTP 200 OK` kèm thông báo *"Rút đơn xin nghỉ phép thành công!"*. Khi nhân viên A đăng nhập lại, đơn của mình đã bị chuyển thành `ĐÃ HỦY` (CANCELLED) bất thường!
+* **Vị trí trong mã nguồn:** `backend/src/leave/leave.service.ts` dòng ~320 (`recallRequest`).
+* **Cách khắc phục:** Mở lại khối lệnh kiểm tra quyền sở hữu đơn trong `backend/src/leave/leave.service.ts`:
+  ```typescript
+  if (leave.userId !== userId) {
+    throw new ForbiddenException('Bạn không có quyền rút đơn của nhân viên khác.');
+  }
+  ```
+
+---
+
+### 🟠 LỖI 12: BUG-12 (MỨC ĐỘ TRUNG BÌNH - MEDIUM SEVERITY)
+* **Tên lỗi:** Tạo đơn nghỉ phép trùng lặp do thiếu cơ chế Debounce / Vô hiệu hóa nút gửi khi Submit (Double Submission Race Condition).
+* **Mức độ:** **Medium (Functional Concurrency / Client-side State Flaw)**
+* **Tiêu chuẩn vi phạm:** **Ngoài đặc tả SRS** (SRS có quy tắc BR-13 chống trùng lịch nhưng chỉ kiểm tra với dữ liệu đã commit trong CSDL; SRS không đặc tả việc xử lý spam click/double-click trên kết nối mạng bất đồng bộ).
+* **Tài khoản kiểm thử:** `an.nguyen@company.vn`
+* **Các bước tái hiện (Steps to Reproduce):**
+  1. Đăng nhập tài khoản nhân viên: `an.nguyen@company.vn`.
+  2. Điền đầy đủ thông tin vào form tạo đơn xin nghỉ phép hợp lệ.
+  3. Mở **Developer Tools (F12) -> tab Network**, tại mục Throttling chọn tốc độ mạng chậm **"Slow 3G"** hoặc **"Fast 3G"**.
+  4. Nhấn đúp chuột thật nhanh (double-click liên tiếp 2 lần) vào nút **"Nộp đơn xin nghỉ phép (Hoàn tất)"**.
+* **Kết quả mong đợi (Expected):** Nút gửi phải bị vô hiệu hóa (`disabled`) ngay từ cú click đầu tiên, ngăn chặn hoàn toàn việc gửi request thứ hai song song.
+* **Kết quả thực tế bị lỗi (Actual):** Cả 2 request `POST /api/leave/request` đều được gửi đi và đều trả về `201 Created`. Trong CSDL và danh sách xuất hiện **2 đơn nghỉ phép trùng ngày** nằm cạnh nhau ở trạng thái `CHỜ DUYỆT`.
+* **Vị trí trong mã nguồn:** `frontend/src/pages/EmployeeDashboard.tsx` dòng ~490 (`button type="submit"`).
+* **Cách khắc phục:** Bật lại thuộc tính `disabled={submitting}` trên nút Submit và thêm kiểm tra `if (submitting) return;` ở đầu hàm `handleSubmit`:
+  ```tsx
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (submitting) return; // Chặn double submit
+    setSubmitting(true);
+    // ...
+  };
+
+  <button type="submit" disabled={submitting} className="...">
+    {submitting ? 'Đang gửi...' : 'Nộp đơn xin nghỉ phép'}
+  </button>
+  ```
+
+---
+
+### 🟡 LỖI 13: BUG-13 (MỨC ĐỘ THẤP - LOW SEVERITY)
+* **Tên lỗi:** Vỡ bố cục bảng lịch sử đơn khi nhân viên nhập lý do chứa chuỗi ký tự dài liên tục không ngắt quãng (Unbroken String Table Overflow).
+* **Mức độ:** **Low (UI Display / Word-break Defect)**
+* **Tiêu chuẩn vi phạm:** **Ngoài đặc tả SRS** (SRS chỉ yêu cầu nhân viên nhập lý do, không đặc tả xử lý tràn giao diện khi người dùng cố tình nhập URL hoặc chuỗi dài không có dấu cách).
+* **Tài khoản kiểm thử:** `an.nguyen@company.vn`
+* **Các bước tái hiện (Steps to Reproduce):**
+  1. Đăng nhập tài khoản nhân viên: `an.nguyen@company.vn`.
+  2. Tại ô **Lý do nghỉ**, dán một chuỗi ký tự dài liên tục không có dấu cách:
+     `https://jira.company.vn/browse/SQA-PROJECT-LONG-TASK-KEY-WITHOUT-ANY-SPACE-IN-THE-REASON-TEXT-FOR-TESTING`
+  3. Nhấn **"Nộp đơn xin nghỉ phép"**.
+  4. Quan sát bảng **"Lịch sử đơn của tôi"** ở cột bên phải.
+* **Kết quả mong đợi (Expected):** Chuỗi ký tự dài phải tự động ngắt dòng (`break-words`) hoặc hiển thị dạng rút gọn (`truncate`) kèm tooltip `title`.
+* **Kết quả thực tế bị lỗi (Actual):** Ô dữ liệu bị phình to vô hạn theo chiều ngang, đẩy các cột **"Số ngày"**, **"Trạng thái"**, và **"Thao tác" (nút Rút đơn, Sửa đơn)** văng ra khỏi màn hình bên phải, làm xuất hiện thanh cuộn ngang vỡ khung.
+* **Vị trí trong mã nguồn:** `frontend/src/pages/EmployeeDashboard.tsx` dòng ~585.
+* **Cách khắc phục:** Đổi class `whitespace-nowrap overflow-visible` thành `truncate max-w-xs`:
+  ```tsx
+  <div className="text-xs text-slate-500 truncate max-w-xs" title={req.reason}>
+    {req.reason}
+  </div>
+  ```
+
+---
+
 ## 🎯 HƯỚNG DẪN TEST VÀ BÀN GIAO CHO TESTER
 
 1. **Khởi chạy hệ thống bình thường:**
@@ -203,8 +301,8 @@
 2. **Cách giao việc cho Tester:**
    - Yêu cầu Tester thực hiện kiểm thử chức năng theo bộ tài liệu đặc tả **SRS_Leave_Management_System.md**.
    - Yêu cầu Tester ghi nhận các Defect / Bug Report vào biểu mẫu (gồm: Bug ID, Tóm tắt lỗi, Mức độ nghiêm trọng, Các bước tái hiện, Expected vs Actual Result).
-   - Dùng tài liệu này làm **Đáp án chuẩn (Grading Key)** để chấm điểm xem Tester tìm được bao nhiêu lỗi trong số 10 lỗi trên!
+   - Dùng tài liệu này làm **Đáp án chuẩn (Grading Key)** để chấm điểm xem Tester tìm được bao nhiêu lỗi trong số **13 lỗi** trên (10 lỗi theo đặc tả SRS + 3 lỗi mở rộng ngoài SRS)!
 
-3. **Cách thu hồi (Revert) toàn bộ 10 lỗi sau khi test xong:**
-   - Trong toàn bộ mã nguồn, cả 10 lỗi đều được gắn cờ comment chuẩn: `[SEEDED_BUG: BUG-xx]`.
-   - Bạn chỉ cần tìm từ khóa `[SEEDED_BUG` trong VS Code / Antigravity để xem và hoàn tác dễ dàng.
+3. **Cách thu hồi (Revert) toàn bộ 13 lỗi sau khi test xong:**
+   - Trong toàn bộ mã nguồn, cả 13 lỗi đều được gắn cờ comment chuẩn: `[SEEDED_BUG: BUG-xx]`.
+   - Bạn chỉ cần tìm kiếm từ khóa `[SEEDED_BUG` trong VS Code / Antigravity để xem và hoàn tác dễ dàng.

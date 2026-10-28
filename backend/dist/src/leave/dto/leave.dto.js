@@ -77,7 +77,7 @@ class RejectLeaveDto {
 exports.RejectLeaveDto = RejectLeaveDto;
 __decorate([
     (0, class_validator_1.IsNotEmpty)({ message: 'Lý do từ chối không được để trống' }),
-    (0, class_validator_1.Length)(10, 500, { message: 'Lý do từ chối phải có tối thiểu 10 ký tự (theo BR-12)' }),
+    (0, class_validator_1.Length)(10, 500),
     __metadata("design:type", String)
 ], RejectLeaveDto.prototype, "rejectReason", void 0);
 class CalculateDaysDto {

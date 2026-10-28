@@ -486,10 +486,12 @@ export const EmployeeDashboard: React.FC = () => {
             </div>
 
             {/* Click 4: Nút Nộp đơn */}
+            {/* [SEEDED_BUG: BUG-12] [MEDIUM] - Race Condition / Double Submission do thiếu disabled/debounce (Ngoài SRS) */}
+            {/* Lỗi: Nút không bị vô hiệu hóa khi đang submitting, cho phép người dùng click đúp gửi 2 request song song tạo 2 đơn trùng nhau */}
             <button
               type="submit"
-              disabled={submitting}
-              className="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-sm text-sm disabled:opacity-50 transition flex items-center justify-center space-x-2"
+              /* disabled={submitting} */
+              className="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-sm text-sm transition flex items-center justify-center space-x-2"
             >
               <Send className="w-4 h-4" />
               <span>{submitting ? 'Đang gửi...' : 'Nộp đơn xin nghỉ phép (Hoàn tất)'}</span>
@@ -578,7 +580,9 @@ export const EmployeeDashboard: React.FC = () => {
                             <div className="text-slate-800 font-medium">
                               {format(new Date(req.startDate), 'dd/MM/yyyy')} - {format(new Date(req.endDate), 'dd/MM/yyyy')}
                             </div>
-                            <div className="text-xs text-slate-500 truncate max-w-xs" title={req.reason}>
+                            {/* [SEEDED_BUG: BUG-13] [LOW] - UI Table Layout Overflow khi nhập chuỗi dài không khoảng cách (Ngoài SRS) */}
+                            {/* Lỗi: Không áp dụng truncate/break-words, chuỗi dài không khoảng trắng sẽ làm tràn bảng và đẩy mất cột Thao tác */}
+                            <div className="text-xs text-slate-500 whitespace-nowrap overflow-visible" title={req.reason}>
                               {req.reason}
                             </div>
                           </td>

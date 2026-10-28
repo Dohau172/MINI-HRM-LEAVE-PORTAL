@@ -23,22 +23,22 @@ export declare class LeaveController {
         data: {
             id: string;
             createdAt: Date;
-            startDate: Date;
-            endDate: Date;
             updatedAt: Date;
+            userId: string;
             leaveType: import(".prisma/client").$Enums.LeaveType;
             leaveUnit: import(".prisma/client").$Enums.LeaveUnit;
+            startDate: Date;
+            endDate: Date;
             workingDays: number;
             reason: string;
             attachmentUrl: string | null;
             status: import(".prisma/client").$Enums.LeaveStatus;
             rejectReason: string | null;
             approvalLevel: number;
+            approvedById: string | null;
             isDelegated: boolean;
             delegationNote: string | null;
             cancelReason: string | null;
-            userId: string;
-            approvedById: string | null;
         };
     }>;
     getMyRequests(userId: string): Promise<({
@@ -49,44 +49,44 @@ export declare class LeaveController {
     } & {
         id: string;
         createdAt: Date;
-        startDate: Date;
-        endDate: Date;
         updatedAt: Date;
+        userId: string;
         leaveType: import(".prisma/client").$Enums.LeaveType;
         leaveUnit: import(".prisma/client").$Enums.LeaveUnit;
+        startDate: Date;
+        endDate: Date;
         workingDays: number;
         reason: string;
         attachmentUrl: string | null;
         status: import(".prisma/client").$Enums.LeaveStatus;
         rejectReason: string | null;
         approvalLevel: number;
+        approvedById: string | null;
         isDelegated: boolean;
         delegationNote: string | null;
         cancelReason: string | null;
-        userId: string;
-        approvedById: string | null;
     })[]>;
     editRequest(userId: string, id: string, dto: EditLeaveDto, file?: Express.Multer.File): Promise<{
         message: string;
         data: {
             id: string;
             createdAt: Date;
-            startDate: Date;
-            endDate: Date;
             updatedAt: Date;
+            userId: string;
             leaveType: import(".prisma/client").$Enums.LeaveType;
             leaveUnit: import(".prisma/client").$Enums.LeaveUnit;
+            startDate: Date;
+            endDate: Date;
             workingDays: number;
             reason: string;
             attachmentUrl: string | null;
             status: import(".prisma/client").$Enums.LeaveStatus;
             rejectReason: string | null;
             approvalLevel: number;
+            approvedById: string | null;
             isDelegated: boolean;
             delegationNote: string | null;
             cancelReason: string | null;
-            userId: string;
-            approvedById: string | null;
         };
     }>;
     recallRequest(userId: string, id: string): Promise<{
@@ -94,22 +94,22 @@ export declare class LeaveController {
         data: {
             id: string;
             createdAt: Date;
-            startDate: Date;
-            endDate: Date;
             updatedAt: Date;
+            userId: string;
             leaveType: import(".prisma/client").$Enums.LeaveType;
             leaveUnit: import(".prisma/client").$Enums.LeaveUnit;
+            startDate: Date;
+            endDate: Date;
             workingDays: number;
             reason: string;
             attachmentUrl: string | null;
             status: import(".prisma/client").$Enums.LeaveStatus;
             rejectReason: string | null;
             approvalLevel: number;
+            approvedById: string | null;
             isDelegated: boolean;
             delegationNote: string | null;
             cancelReason: string | null;
-            userId: string;
-            approvedById: string | null;
         };
     }>;
     cancelRequestOld(userId: string, id: string): Promise<{
@@ -117,22 +117,22 @@ export declare class LeaveController {
         data: {
             id: string;
             createdAt: Date;
-            startDate: Date;
-            endDate: Date;
             updatedAt: Date;
+            userId: string;
             leaveType: import(".prisma/client").$Enums.LeaveType;
             leaveUnit: import(".prisma/client").$Enums.LeaveUnit;
+            startDate: Date;
+            endDate: Date;
             workingDays: number;
             reason: string;
             attachmentUrl: string | null;
             status: import(".prisma/client").$Enums.LeaveStatus;
             rejectReason: string | null;
             approvalLevel: number;
+            approvedById: string | null;
             isDelegated: boolean;
             delegationNote: string | null;
             cancelReason: string | null;
-            userId: string;
-            approvedById: string | null;
         };
     }>;
     requestCancelApproved(userId: string, id: string, dto: RequestCancelDto): Promise<{
@@ -140,31 +140,31 @@ export declare class LeaveController {
         data: {
             id: string;
             createdAt: Date;
-            startDate: Date;
-            endDate: Date;
             updatedAt: Date;
+            userId: string;
             leaveType: import(".prisma/client").$Enums.LeaveType;
             leaveUnit: import(".prisma/client").$Enums.LeaveUnit;
+            startDate: Date;
+            endDate: Date;
             workingDays: number;
             reason: string;
             attachmentUrl: string | null;
             status: import(".prisma/client").$Enums.LeaveStatus;
             rejectReason: string | null;
             approvalLevel: number;
+            approvedById: string | null;
             isDelegated: boolean;
             delegationNote: string | null;
             cancelReason: string | null;
-            userId: string;
-            approvedById: string | null;
         };
     }>;
     getTeamCalendar(department?: string, month?: string, year?: string): Promise<{
         holidays: {
             id: string;
+            createdAt: Date;
             name: string;
             date: Date;
             description: string | null;
-            createdAt: Date;
         }[];
         leaves: ({
             user: {
@@ -176,22 +176,22 @@ export declare class LeaveController {
         } & {
             id: string;
             createdAt: Date;
-            startDate: Date;
-            endDate: Date;
             updatedAt: Date;
+            userId: string;
             leaveType: import(".prisma/client").$Enums.LeaveType;
             leaveUnit: import(".prisma/client").$Enums.LeaveUnit;
+            startDate: Date;
+            endDate: Date;
             workingDays: number;
             reason: string;
             attachmentUrl: string | null;
             status: import(".prisma/client").$Enums.LeaveStatus;
             rejectReason: string | null;
             approvalLevel: number;
+            approvedById: string | null;
             isDelegated: boolean;
             delegationNote: string | null;
             cancelReason: string | null;
-            userId: string;
-            approvedById: string | null;
         })[];
         range: {
             start: Date;
@@ -201,8 +201,8 @@ export declare class LeaveController {
     getManagerRequests(user: any, status?: LeaveStatus): Promise<({
         user: {
             id: string;
-            fullName: string;
             email: string;
+            fullName: string;
             contractType: import(".prisma/client").$Enums.ContractType;
             position: string;
             department: string;
@@ -215,44 +215,44 @@ export declare class LeaveController {
     } & {
         id: string;
         createdAt: Date;
-        startDate: Date;
-        endDate: Date;
         updatedAt: Date;
+        userId: string;
         leaveType: import(".prisma/client").$Enums.LeaveType;
         leaveUnit: import(".prisma/client").$Enums.LeaveUnit;
+        startDate: Date;
+        endDate: Date;
         workingDays: number;
         reason: string;
         attachmentUrl: string | null;
         status: import(".prisma/client").$Enums.LeaveStatus;
         rejectReason: string | null;
         approvalLevel: number;
+        approvedById: string | null;
         isDelegated: boolean;
         delegationNote: string | null;
         cancelReason: string | null;
-        userId: string;
-        approvedById: string | null;
     })[]>;
     approveRequest(user: any, id: string): Promise<{
         message: string;
         data: {
             id: string;
             createdAt: Date;
-            startDate: Date;
-            endDate: Date;
             updatedAt: Date;
+            userId: string;
             leaveType: import(".prisma/client").$Enums.LeaveType;
             leaveUnit: import(".prisma/client").$Enums.LeaveUnit;
+            startDate: Date;
+            endDate: Date;
             workingDays: number;
             reason: string;
             attachmentUrl: string | null;
             status: import(".prisma/client").$Enums.LeaveStatus;
             rejectReason: string | null;
             approvalLevel: number;
+            approvedById: string | null;
             isDelegated: boolean;
             delegationNote: string | null;
             cancelReason: string | null;
-            userId: string;
-            approvedById: string | null;
         };
     }>;
     rejectRequest(user: any, id: string, dto: RejectLeaveDto): Promise<{
@@ -260,22 +260,22 @@ export declare class LeaveController {
         data: {
             id: string;
             createdAt: Date;
-            startDate: Date;
-            endDate: Date;
             updatedAt: Date;
+            userId: string;
             leaveType: import(".prisma/client").$Enums.LeaveType;
             leaveUnit: import(".prisma/client").$Enums.LeaveUnit;
+            startDate: Date;
+            endDate: Date;
             workingDays: number;
             reason: string;
             attachmentUrl: string | null;
             status: import(".prisma/client").$Enums.LeaveStatus;
             rejectReason: string | null;
             approvalLevel: number;
+            approvedById: string | null;
             isDelegated: boolean;
             delegationNote: string | null;
             cancelReason: string | null;
-            userId: string;
-            approvedById: string | null;
         };
     }>;
     confirmCancelRequest(user: any, id: string, dto: ConfirmCancelDto): Promise<{
@@ -283,22 +283,22 @@ export declare class LeaveController {
         data: {
             id: string;
             createdAt: Date;
-            startDate: Date;
-            endDate: Date;
             updatedAt: Date;
+            userId: string;
             leaveType: import(".prisma/client").$Enums.LeaveType;
             leaveUnit: import(".prisma/client").$Enums.LeaveUnit;
+            startDate: Date;
+            endDate: Date;
             workingDays: number;
             reason: string;
             attachmentUrl: string | null;
             status: import(".prisma/client").$Enums.LeaveStatus;
             rejectReason: string | null;
             approvalLevel: number;
+            approvedById: string | null;
             isDelegated: boolean;
             delegationNote: string | null;
             cancelReason: string | null;
-            userId: string;
-            approvedById: string | null;
         };
     }>;
     getDelegations(userId: string): Promise<({
@@ -314,11 +314,11 @@ export declare class LeaveController {
         };
     } & {
         id: string;
+        isActive: boolean;
         createdAt: Date;
+        updatedAt: Date;
         startDate: Date;
         endDate: Date;
-        updatedAt: Date;
-        isActive: boolean;
         reason: string;
         delegatorId: string;
         delegateeId: string;
@@ -327,16 +327,16 @@ export declare class LeaveController {
         message: string;
         data: {
             delegatee: {
-                fullName: string;
                 email: string;
+                fullName: string;
             };
         } & {
             id: string;
+            isActive: boolean;
             createdAt: Date;
+            updatedAt: Date;
             startDate: Date;
             endDate: Date;
-            updatedAt: Date;
-            isActive: boolean;
             reason: string;
             delegatorId: string;
             delegateeId: string;
@@ -346,11 +346,11 @@ export declare class LeaveController {
         message: string;
         data: {
             id: string;
+            isActive: boolean;
             createdAt: Date;
+            updatedAt: Date;
             startDate: Date;
             endDate: Date;
-            updatedAt: Date;
-            isActive: boolean;
             reason: string;
             delegatorId: string;
             delegateeId: string;
@@ -358,8 +358,8 @@ export declare class LeaveController {
     }>;
     getPotentialDelegatees(user: any): Promise<{
         id: string;
-        fullName: string;
         email: string;
+        fullName: string;
         position: string;
         department: string;
     }[]>;

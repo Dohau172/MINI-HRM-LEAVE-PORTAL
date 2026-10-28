@@ -92,7 +92,7 @@ let LeaveService = class LeaveService {
             if (workingDays === 0) {
                 throw new common_1.BadRequestException('Khoảng thời gian bạn chọn không chứa ngày làm việc nào (rơi vào ngày Lễ/Tết hoặc Thứ 7, Chủ Nhật).');
             }
-            if (dto.leaveType === client_1.LeaveType.ANNUAL) {
+            if (dto.leaveType === client_1.LeaveType.ANNUAL && dto.leaveUnit === client_1.LeaveUnit.FULL_DAY) {
                 const approvedLeaves = await this.prisma.leaveRequest.findMany({
                     where: {
                         userId,
@@ -230,9 +230,6 @@ let LeaveService = class LeaveService {
         });
         if (!leave) {
             throw new common_1.NotFoundException('Không tìm thấy đơn xin nghỉ phép.');
-        }
-        if (leave.userId !== userId) {
-            throw new common_1.ForbiddenException('Bạn không có quyền rút đơn của nhân viên khác.');
         }
         leave_rules_util_1.LeaveRulesUtil.validateCanRecall(leave.status);
         const cancelled = await this.prisma.leaveRequest.update({

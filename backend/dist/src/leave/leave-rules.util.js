@@ -53,7 +53,7 @@ class LeaveRulesUtil {
                 }
                 cursor = (0, date_fns_1.addDays)(cursor, -1);
             }
-            if (pastWorkingDays > 3) {
+            if (pastWorkingDays >= 3) {
                 throw new Error('Từ ngày không được lùi về quá khứ quá 3 ngày làm việc (theo BR-07).');
             }
         }
@@ -64,7 +64,7 @@ class LeaveRulesUtil {
         }
     }
     static validateMedicalAttachment(leaveType, workingDays, attachmentUrl) {
-        if (leaveType === client_1.LeaveType.SICK && workingDays >= 2.0) {
+        if (leaveType === client_1.LeaveType.SICK && workingDays > 2.0) {
             if (!attachmentUrl || attachmentUrl.trim() === '') {
                 throw new Error('Nghỉ ốm đau từ 2 ngày làm việc trở lên bắt buộc phải đính kèm chứng từ y tế hợp lệ (theo BR-08).');
             }
@@ -82,7 +82,7 @@ class LeaveRulesUtil {
         return { available, remaining: available - requestedDays };
     }
     static determineApprovalLevel(workingDays) {
-        if (workingDays >= 3.0) {
+        if (workingDays > 3.0) {
             return { approvalLevel: 2, initialStatus: client_1.LeaveStatus.PENDING };
         }
         return { approvalLevel: 1, initialStatus: client_1.LeaveStatus.PENDING };

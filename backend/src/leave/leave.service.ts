@@ -317,9 +317,14 @@ export class LeaveService {
       throw new NotFoundException('Không tìm thấy đơn xin nghỉ phép.');
     }
 
+    // [SEEDED_BUG: BUG-11] [HIGH] - Lỗ hổng IDOR / Broken Object Level Authorization (Ngoài SRS)
+    // Lỗi: Lập trình viên bỏ quên việc kiểm tra quyền sở hữu đơn (leave.userId === userId),
+    // cho phép bất kỳ nhân viên nào đăng nhập cũng có thể rút/hủy đơn của người khác nếu biết requestId!
+    /*
     if (leave.userId !== userId) {
       throw new ForbiddenException('Bạn không có quyền rút đơn của nhân viên khác.');
     }
+    */
 
     LeaveRulesUtil.validateCanRecall(leave.status);
 
